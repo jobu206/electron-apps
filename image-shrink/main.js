@@ -13,6 +13,7 @@ const isDev = process.env.NODE_ENV !== 'production' ? true : false;
 const isMac = process.platform === 'darwin' ? true : false;
 
 let mainWindow;
+let aboutWindow;
 
 function createMainWindow() {
 	mainWindow = new BrowserWindow({
@@ -110,7 +111,7 @@ async function shrinkImage({ imgPath, quality, dest }) {
 	try {
 		const pngQual = quality / 100;
 
-		const files = await imagemin([slash(imgPath)], {
+		await imagemin([slash(imgPath)], {
 			destination: dest,
 			plugins: [
 				imageminMozjpeg({ quality }),
@@ -129,7 +130,7 @@ async function shrinkImage({ imgPath, quality, dest }) {
 }
 
 app.on('window-all-closed', () => {
-	if (!isMac) {
+	if (isMac) {
 		app.quit();
 	}
 });
